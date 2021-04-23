@@ -12,10 +12,15 @@ exports.getById = async(id) => {
     const res = await Member.findById(id)
     return res
 }
+
  exports.getByYear = async(y) => {
      year = parseInt(y)
     const res = await Member.aggregate([
-        {$match: {"data.year":year}}
+        {$match: {"data.year":year}},
+        {$project: {"name": res.name,
+                    "linkedin":res. linkedin,
+                    "img": res.upload.img,
+                    "ano": res.year }}
     ])
     console.log(res)
     return res
@@ -28,7 +33,7 @@ exports.getByUserId = async(id) => {
 
 exports.getBySub = async(sub) => {
     const res = await Member.aggregate([
-        {$match: {"data.subsystem":sub}}
+        {$match: {"data.year":year}}
     ])
     return res
 }

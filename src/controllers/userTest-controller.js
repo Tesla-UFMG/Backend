@@ -47,13 +47,12 @@ exports.post = async(req,res,next) => {
     }
 }
 
-exports.authenticate = async(req,res,next) => {   
+exports.login = async(req,res,next) => {   
     const user = {...req.body}
     try{
-        contract.existsOrError(user.name, 'Nome nao informado!')
         contract.existsOrError(user.email, 'Email nao informado!')
         contract.existsOrError(user.password, 'Senha não informada!')
-        
+
         const access = await repository.authenticate({
             name: req.body.name,
             email: req.body.email,
@@ -61,17 +60,16 @@ exports.authenticate = async(req,res,next) => {
         })
 
         const token = await authService.generateToken({email: access.email, name: access.name})
-
-        
+        console.log("token =" , token)
         res.status(201).send({
             token: token,
             data: {
                 email: access.email,
-                name: access.name
+                name: access.name + " " + access.lastName
             }
         })
     } catch(e) {
-        res.status(500).send(e)
+        res.status(404).send(e)
     }
 }
 

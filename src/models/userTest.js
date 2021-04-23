@@ -20,8 +20,7 @@ const userTestSchema = new Schema({
     },
     password: {
         type: String,
-        required: true,
-        select: false
+        required: true
     },
     admin: {
         type: Boolean,

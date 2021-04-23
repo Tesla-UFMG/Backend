@@ -1,26 +1,45 @@
 const mongoose = require('mongoose')
 const UserTest = mongoose.model('UserTest')
 const bcrypt = require('bcrypt-nodejs')
+const authService = require('../services/auth-service')
+const { notExistsOrError } = require('../validators/validation-crud')
 
 encryptPassword = password => {
     const salt = bcrypt.genSaltSync(10)
+    
     return bcrypt.hashSync(password,salt)
+}
+
+function compareAsync(param1, param2) {
+    return new Promise(function(resolve, reject) {
+        bcrypt.compare(param1, param2, function(err, res) {
+            if (err) {
+                 reject(err);
+            } else {
+                 resolve(res);
+            }
+        });
+    });
 }
 
 
 exports.authenticate = async(data) => {
-    data.password = encryptPassword(data.password)
+    var response = "a"
     const user = await UserTest.findOne({
         email: data.email
     })
-    
     if(!user){
         throw('error: email não encontrado')
     }else{
-        const password = await bcrypt.compare(data.password, user.password)
-            console.log('password')
+        const res = await compareAsync(data.password, user.password)
+        if(res){
+            return user
+        }else{
+            throw("senhas nao conferem")
         }
-    } 
+    }
+}
+
 
 
 exports.get = async() => {

@@ -25,6 +25,10 @@ const memberSchema = new Schema({
             img: {
                 type: Schema.Types.ObjectId
             },
+            system: {
+                type: String,
+                require: true,
+            },
             subsystem: {
                 type: String,
                 enum: ['Baterias' , 'Aquisição', 'Site', 'Sem Classificação'],

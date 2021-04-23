@@ -1,13 +1,14 @@
 const express = require('express')
 const router = express.Router()
 
+
 //Carrega controller
 const controller = require('../controllers/userTest-controller')
 
 router.get('/', controller.get)
-router.get('/', controller.getById)
+router.get('/:id', controller.getById)
 router.post('/',controller.post)
-//router.post('/authenticate',controller.authenticate)
+router.post('/login',controller.login)
 router.put('/:id',controller.put)
 router.delete('/:id',controller.delete)
 
